@@ -4,10 +4,8 @@ import { requestLogger } from './middlewares/requestLogger.middleware.js'
 import { notFoundHandler } from './middlewares/notFound.middleware.js'
 import { errorHandler } from './middlewares/error.middleware.js'
 import router from './routes/routes.js'
-import { Server } from 'http'
 
 const app = express()
-const server = new Server(app)
 
 app.use(corsMiddleware)
 app.use(requestLogger)
@@ -19,4 +17,4 @@ app.use('/api', router)
 app.use(notFoundHandler)
 app.use(errorHandler)
 
-export default server
+export default app

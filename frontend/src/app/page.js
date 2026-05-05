@@ -1,30 +1,23 @@
-import Header from '@/components/global/header';
-import HeroSection from '@/components/homepage/hero'
-import Connect from "@/components/homepage/network-join";
-import { Separator } from "@/components/ui/separator";
-import { getSession } from "@/lib/auth";
-import { headers } from "next/headers";
+import Image from "next/image";
+import {Card, CardContent, CardHeader, CardTitle, CardFooter} from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
 
-
-export default async function HomePage() {
-
-  let session = null;
-  try {
-    session = await getSession({
-      fetchOptions: { headers: await headers() }
-    })
-  } catch (error) {
-    console.log(error);
-    session = null
-  }
-
-  const user = session?.data?.user || null;
+export default function Home() {
   return (
-    <main className="w-full min-h-screen bg-on-surface">
-      <Header user={user} />
-      <HeroSection />
-      <Separator />
-      <Connect user={user} />
-    </main>
-  )
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          Hello
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        Hi how are you
+      </CardContent>
+      <CardFooter>
+        <Button>
+          Say Hi
+        </Button>
+      </CardFooter>
+    </Card>
+  );
 }

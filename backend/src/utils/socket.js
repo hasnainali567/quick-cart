@@ -13,6 +13,9 @@ const initSocket = (server) => {
     },
   });
 
+  console.log('socket initialized');
+  
+
   io.on("connection", (socket) => {
     console.log("Socket connected:", socket.id);
 
