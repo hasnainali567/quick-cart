@@ -54,7 +54,7 @@ export const getAllProducts = asynHandler(async (req, res) => {
                 stock: true,
                 status: true,
                 adminStatus: true,
-                isOrganic,
+                isOrganic : true,
                 images: true,
                 isActive: true,
                 variants: {
@@ -64,7 +64,7 @@ export const getAllProducts = asynHandler(async (req, res) => {
                     }
                 }
             },
-            orderBy: price
+            orderBy: sort
                 ? { price: sort === 'asc' ? 'asc' : 'desc' }
                 : { createdAt: 'desc' }, // ← sensible default
             take,

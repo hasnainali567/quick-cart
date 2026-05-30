@@ -2,8 +2,8 @@ import { NotFoundError } from "../utils/errors.js"
 
 export const getPagination = (query) => {
     return {
-        take: query.take || 10,
-        skip: query.skip || 0
+        take: parseInt(query.take, 10) || 10,
+        skip: parseInt(query.skip, 10) || 0
     }
 }
 

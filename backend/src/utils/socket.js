@@ -1,34 +1,81 @@
 import { Server } from "socket.io";
+import { UnauthorizedError } from "./errors";
+import { auth } from "../lib/auth";
 
 let io;
 const connectedUsers = new Map();
-// connectedUsers = { "userId123": "socketId_abc" }
 
 const initSocket = (server) => {
-
   io = new Server(server, {
     cors: {
-      origin: process.env.FRONTEND_URL,
+      origin: "*",
       methods: ["GET", "POST"],
     },
   });
 
-  console.log('socket initialized');
-  
+  console.log("socket initialized");
+
+  io.use(async (socket, next) => {
+    const token = socket.handshake.headers.cookie;
+
+    if (!token) {
+      return next(new UnauthorizedError("Authentication token missing"));
+    }
+
+    const session = await auth.api.getSession({
+      headers: {
+        cookie: token,
+      },
+    });
+
+    if (!session || !session.user) {
+      return next(new UnauthorizedError("Invalid session"));
+    }
+
+    socket.user = session.user;
+    socket.userId = session.user.id;
+    socket.role = session.user?.role;
+
+    next();
+  });
 
   io.on("connection", (socket) => {
     console.log("Socket connected:", socket.id);
 
-    // Client must emit this right after connecting
-    // with their userId from JWT
-    socket.on("user:join", (userId) => {
-      connectedUsers.set(userId, socket.id);
-      socket.join(`user:${userId}`);
-      console.log(`User ${userId} joined their room`);
+    socket.on("user:join", () => {
+      connectedUsers.set(socket.userId, socket.id);
+      socket.join(`user:${socket.userId}`);
+      console.log(`User ${socket.userId} joined their room`);
+    });
+
+    socket.on("store:join", (storeId) => {
+      socket.join(`store:${storeId}`);
+      console.log(`store ${storeId} joined their room`);
+      socket.to(`store:${storeId}`).emit('notification:new', 'recieving')
+    });
+
+    socket.on("driver:join", (driverId) => {
+      socket.join(`dirver:${driverId}`);
+      console.log(`driver ${driverId} joined their room`);
+    });
+
+    socket.on("customer:order:join", (orderId) => {
+      connectedUsers.set(socket.userId, socket.id);
+      socket.join(`order:${orderId}`);
+      console.log("user joined order room");
+    });
+
+    socket.on("store:order:join", ({ orderId }) => {
+      socket.join(`order:${orderId}`);
+      console.log("store joined order room");
+    });
+
+    socket.on("driver:order:join", ({ orderId }) => {
+      socket.join(`order:${orderId}`);
+      console.log("driver joined order");
     });
 
     socket.on("disconnect", () => {
-      // Remove user from map on disconnect
       for (const [userId, socketId] of connectedUsers.entries()) {
         if (socketId === socket.id) {
           connectedUsers.delete(userId);

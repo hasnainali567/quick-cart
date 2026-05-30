@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { createStore, getStore, getStoreEarnings, getStoreLocation, getStoreLogoBanner, getStoreReview, getStoreTimings, toggleStoreStatus, updateBanner, updateLogo, updateStore, updateStoreLocation, updateStoreTimings,  } from "../../../controllers/storeController/store.controller.js";
+import { registerStore, getStore, getStoreEarnings, getStoreLocation, getStoreLogoBanner, getStoreReview, getStoreTimings, toggleStoreStatus, updateBanner, updateLogo, updateStore, updateStoreLocation, updateStoreTimings,  } from "../../../controllers/storeController/store.controller.js";
 import { uploadSingleImage } from "../../../middlewares/multer.middleware.js";
 import productRouter from "./product/routes.js";
 import { allowRoles } from '../../../middlewares/auth.middleware.js';
+import orderRouter from "./order/routes.js";
 const storeAdminRouter = Router();
 
-storeAdminRouter.post('/create', createStore);
+storeAdminRouter.post('/register', registerStore);
 
 storeAdminRouter.use(allowRoles('STORE_ADMIN', 'SUPER_ADMIN'))
 storeAdminRouter.get('/', getStore);
@@ -15,11 +16,22 @@ storeAdminRouter.get('/:id/logo-banner', getStoreLogoBanner);
 storeAdminRouter.patch('/:id/logo', uploadSingleImage('logo'), updateLogo);
 storeAdminRouter.patch('/:id/banner', uploadSingleImage('banner'), updateBanner);
 storeAdminRouter.patch('/:id/status', toggleStoreStatus);
+
+//Earnings Route
 storeAdminRouter.get('/:id/earnings', getStoreEarnings);
+
+//Timing Routes
 storeAdminRouter.get('/:id/timings', getStoreTimings);
 storeAdminRouter.patch('/:id/timings', updateStoreTimings);
+
+//Location Routes
 storeAdminRouter.get('/:id/location', getStoreLocation);
 storeAdminRouter.patch('/:id/location', updateStoreLocation);
+
+//Product Routes
 storeAdminRouter.use('/product', productRouter)
+
+//Order Routes
+storeAdminRouter.use('/orders', orderRouter)
 
 export default storeAdminRouter;

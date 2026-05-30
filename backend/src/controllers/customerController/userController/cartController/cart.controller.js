@@ -36,13 +36,9 @@ export const getUserCart = asyncHandler(async (req, res) => {
                 }
             },
         },
-        o,
-        orderBy: {
-            createdAt: true
-        }
     })
 
-    return new ApiResponse(200, cart, 'Cart retrieved Successfully')
+    return new ApiResponse(200, cart, 'Cart retrieved Successfully').send(res)
 })
 
 export const addToCart = asyncHandler(async (req, res) => {
@@ -86,7 +82,7 @@ export const addToCart = asyncHandler(async (req, res) => {
         })
     })
 
-    return new ApiResponse(201, cartItems, 'cart added successfully')
+    return new ApiResponse(201, cartItems, 'cart added successfully').send(res)
 })
 
 export const updateItemQuatity = asyncHandler(async (req, res) => {
@@ -104,11 +100,12 @@ export const updateItemQuatity = asyncHandler(async (req, res) => {
             quantity: true
         }
     })
+    
     if ((!cartItem)) {
         throw new NotFoundError('cart item not found')
     }
 
-    return new ApiResponse(200, cartItem, 'quantity update successfully')
+    return new ApiResponse(200, cartItem, 'quantity update successfully').send(res)
 })
 
 export const deleteCartItem = asyncHandler(async (req, res) => {

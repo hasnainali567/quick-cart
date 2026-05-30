@@ -61,9 +61,7 @@ const getTodaysTiming = (storeHours = []) => {
     return getUniqueStoreHours(storeHours).find((storeHour) => storeHour.day === todayKey) ?? null;
 };
 
-
-
-export const createStore = asynHandler(async (req, res) => {
+export const registerStore = asynHandler(async (req, res) => {
     const { id } = req.user;
     const { name, addressLine1, city, area, latitude, longitude } = req.body;
     const slug = slugify(name);
@@ -91,7 +89,7 @@ export const createStore = asynHandler(async (req, res) => {
         await tx.user.update({
             where: { id },
             data: {
-                role: ""
+                role: "STORE_ADMIN"
             }
         })
 
