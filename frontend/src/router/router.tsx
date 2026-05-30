@@ -14,45 +14,59 @@ const Router = () => {
   const { data, isPending } = useSession();
   const user = data?.user;
   console.log(user);
-  
 
   return (
-    <Suspense fallback={<div className="fixed top-0 w-full h-1 bg-white"></div>}>
+    <Suspense
+      fallback={<div className="fixed top-0 w-full h-1 bg-white"></div>}
+    >
       <Routes>
         <Route path="/" element={<Home />} />
         {!isPending && !user && (
           <Route element={<AuthLayout />}>
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
-            <Route path="*" element={<Navigate to={'/'} />} />
+            <Route path="*" element={<Navigate to={"/"} />} />
           </Route>
         )}
-        {(!isPending && user) && (user as { role? : string}).role === 'CUSTOMER' && (
-          <Route element={<Layout />}>
-            <Route path="/driver/register" element={<div>Driver Register</div>} />
-          <Route path="*" element={<Navigate to={'/'} />} />
-          </Route>
-        )}
-        {(!isPending && user) && (user as { role? : string}).role === 'STORE_ADMIN' && (
-          <>
-          <Route path="/dashboard" element={<StoreLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="products" element={<div>Product</div>} />
-            <Route path="products/:slug" element={<div>Product id</div>} /> 
-            <Route path="categories" element={<div>Category</div>} />
-            <Route path="categories/:slug" element={<div>category id</div>} /> 
-            <Route path="orders" element={<div>Orders</div>} /> 
-            <Route path="settings" element={<div>Sttings</div>} /> 
-            <Route path="*" element={<Navigate to={'/dashboard'} />} />
-          </Route>
-          <Route path="*" element={<Navigate to={'/'} />} />
-          </>
-        )}
-        {(!isPending && user) && (user as { role? : string}).role === 'SUPER_ADMIN' && (
-          <Route path="/admin" element={<Layout />}>
-            <Route path="dashboard" element={<div>Admin Dashboard</div>} />
-          </Route>
-        )}
+        {!isPending &&
+          user &&
+          (user as { role?: string }).role === "CUSTOMER" && (
+            <Route element={<Layout />}>
+              <Route
+                path="/driver/register"
+                element={<div>Driver Register</div>}
+              />
+              <Route path="*" element={<Navigate to={"/"} />} />
+            </Route>
+          )}
+        {!isPending &&
+          user &&
+          (user as { role?: string }).role === "STORE_ADMIN" && (
+            <>
+              <Route path="/store" element={<StoreLayout />}>
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="products" element={<div>Product</div>} />
+                <Route path="products/:slug" element={<div>Product id</div>} />
+                <Route path="categories" element={<div>Category</div>} />
+                <Route
+                  path="categories/:slug"
+                  element={<div>category id</div>}
+                />
+                <Route path="orders" element={<div>Orders</div>} />
+                <Route path="earnings" element={<div>Earnings</div>} />
+                <Route path="settings" element={<div>Sttings</div>} />
+                <Route path="*" element={<Navigate to={"/store/dashboard"} />} />
+              </Route>
+              <Route path="*" element={<Navigate to={"/"} />} />
+            </>
+          )}
+        {!isPending &&
+          user &&
+          (user as { role?: string }).role === "SUPER_ADMIN" && (
+            <Route path="/admin" element={<Layout />}>
+              <Route path="dashboard" element={<div>Admin Dashboard</div>} />
+            </Route>
+          )}
       </Routes>
     </Suspense>
   );

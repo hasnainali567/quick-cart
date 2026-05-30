@@ -18,27 +18,27 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 const STORE_ROUTES = [
   {
-    to: "/dashboard/",
+    to: "/store/dashboard",
     icon: DashboardBrowsingFreeIcons,
     label: "Dashboard",
   },
   {
-    to: "/dashboard/orders",
+    to: "/store/orders",
     icon: ShippingCenterFreeIcons,
     label: "Orders",
   },
   {
-    to: "/dashboard/products",
+    to: "/store/products",
     icon: VegetarianFoodFreeIcons,
     label: "Products",
   },
   {
-    to: "/dashboard/categories",
+    to: "/store/categories",
     icon: CatalogueFreeIcons,
     label: "Categories",
   },
   {
-    to: "/dashboard/earnings",
+    to: "/store/earnings",
     icon: CreditCard,
     label: "Earnings",
   },
@@ -61,7 +61,7 @@ const StoreLayout = () => {
             avatar: user?.image || undefined,
           }}
           routes={STORE_ROUTES}
-          settingsRoute="/dashboard/settings"
+          settingsRoute="/settings"
         />
         <main className="w-full">
           <div className="w-full p-2 border-b border-border flex gap-2 items-center justify-between">
@@ -71,12 +71,12 @@ const StoreLayout = () => {
             </div>
             <div className="flex items-center gap-2">
               <Button variant={"ghost"} className="size-8" asChild>
-                <Link to={"/dashboard/notifications"}>
+                <Link to={"/notifications"}>
                   <HugeiconsIcon icon={Bell} />
                 </Link>
               </Button>
               <Button variant={"ghost"} className="size-8" asChild>
-                <Link to={"/dashboard/settings"}>
+                <Link to={"/settings"}>
                   <HugeiconsIcon icon={Settings} />
                 </Link>
               </Button>
