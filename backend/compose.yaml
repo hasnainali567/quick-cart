@@ -1,15 +1,9 @@
 services:
-  api: 
+  api:
     build: .
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://postgres:hasnain@localhost:5432/quick_cart
-      - BASE_URL=http://localhost:5000
-      - FRONTEND_URL=http://localhost:5173
-      - CLOUDINARY_CLOUD_NAME=di6zqorpf
-      - CLOUDINARY_API_KEY=714176993132482
-      - CLOUDINARY_API_SECRET=1F7T2N03NwgscbdxgS2HO8Gaiys
 
   depends_on:
     postgres:
@@ -19,7 +13,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-  
+
   postgres:
     image: postgres:17
     environment:
