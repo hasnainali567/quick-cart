@@ -498,6 +498,7 @@ model Delivery {
   orderId        String         @unique
   driverId       String
   assignedAt     DateTime       @default(now())
+  status         DeliveryStatus @default(ASSIGNED)
   acceptedAt     DateTime?
   arrivedStoreAt DateTime?
   pickedUpAt     DateTime?
@@ -810,6 +811,8 @@ enum OrderStatus {
   DELIVERED // done ✅
   CANCELLED // cancelled
   REJECTED // store rejected
+  DRIVER_ASSIGNMENT_FAILED // driver assignment failed
+  NO_DRIVERS_AVAILABLE // no drivers available
 }
 
 enum PaymentStatus {
@@ -887,4 +890,14 @@ enum ReportType {
   DRIVERS
   CUSTOMERS
   PRODUCTS
+}
+
+enum DeliveryStatus {
+  ASSIGNED
+  ACCEPTED
+  ARRIVED_STORE
+  PICKED_UP
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
 }

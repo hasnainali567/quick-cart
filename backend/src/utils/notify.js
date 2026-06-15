@@ -4,7 +4,7 @@ import prisma from "../lib/prisma.js";
 const notify = async ({ to, userId, data = {}, extra }) => {
   try {
     if (!data.title || !data.body || !data.type)
-      throw new Error(`Unknown notification type: ${type}`);
+      throw new Error(`Unknown notification type: ${data.type}`);
 
     const title = data.title;
     const body = data.body;
