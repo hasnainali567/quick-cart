@@ -19,7 +19,7 @@ export const postRequest = async <TResponse, TBody extends object>(options: {
 
 export const patchRequest = async <TResponse, TBody extends object>(options: {
   url: string;
-  body: TBody;
+  body?: TBody;
 }): Promise<TResponse> => {
   const res = await api.patch<ApiResponse<TResponse>>(
     options.url,

@@ -7,6 +7,8 @@ import {
   Bell,
   Circle,
   CustomerSupportIcon,
+  Loader,
+  LoaderCircle,
   Search,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -28,6 +30,8 @@ import {
   SelectGroup,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import useUpdateStoreStatus from "@/features/store/hooks/useUpdateStoreStatus";
+import { toast } from "sonner";
 
 type Props = {
   user: User;
@@ -35,6 +39,12 @@ type Props = {
 };
 
 const StoreHeader = ({ user, store }: Props) => {
+  const { mutate, isPending, isError } = useUpdateStoreStatus();
+
+  if (isError) {
+    toast.error("Failed to update store status");
+  }
+
   return (
     <div className="sticky top-0 z-50 backdrop-blur-2xl bg-secondary/20 flex items-center justify-between gap-2 p-2 border-border border-b w-full">
       <div className="flex items-center gap-2 ">
@@ -53,7 +63,7 @@ const StoreHeader = ({ user, store }: Props) => {
           <Select
             value={store?.status}
             onValueChange={() => {
-              // TODO: implement store status change
+              mutate({ id: store.id });
             }}
           >
             <SelectTrigger>
@@ -63,15 +73,33 @@ const StoreHeader = ({ user, store }: Props) => {
               <SelectGroup>
                 <SelectLabel>Store Status</SelectLabel>
                 <SelectItem value={"OPEN"}>
-                  <span>
-                    <HugeiconsIcon icon={Circle} fill={"green"} />
-                  </span>{" "}
+                  {isPending ? (
+                    <span className="text-sm">
+                      <HugeiconsIcon
+                        icon={LoaderCircle}
+                        className="animate-spin"
+                      />
+                    </span>
+                  ) : (
+                    <span className="text-sm">
+                      <HugeiconsIcon icon={Circle} fill={"green"} size={12} />
+                    </span>
+                  )}
                   OPEN
                 </SelectItem>
                 <SelectItem value={"CLOSED"}>
-                  <span>
-                    <HugeiconsIcon icon={Circle} fill={"red"} />
-                  </span>{" "}
+                  {isPending ? (
+                    <span className="text-sm">
+                      <HugeiconsIcon
+                        icon={LoaderCircle}
+                        className="animate-spin"
+                      />
+                    </span>
+                  ) : (
+                    <span className="text-sm">
+                      <HugeiconsIcon icon={Circle} fill={"red"} size={12} />
+                    </span>
+                  )}{" "}
                   CLOSED
                 </SelectItem>
               </SelectGroup>
