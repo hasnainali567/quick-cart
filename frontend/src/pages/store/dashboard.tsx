@@ -2,16 +2,22 @@ import TopProgressBar from "@/components/global/AuthLoader";
 import IncomingOrders from "@/components/store/dashboard/IncomingOrders";
 import RecentOrders from "@/components/store/dashboard/RecentOrders";
 import StatCards from "@/components/store/dashboard/StatCards";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import useUpdateStoreStatus from "@/features/store/hooks/useUpdateStoreStatus";
 import { useGetStore } from "@/hooks/use-query";
-import { ShoppingBagFavoriteFreeIcons } from "@hugeicons/core-free-icons";
+import { cn } from "@/lib/utils";
+import {
+  LoaderCircle,
+  ShoppingBagFavoriteFreeIcons,
+  Store,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { toast } from "sonner";
 
 const Dashboard = () => {
   const { data, isError, isLoading } = useGetStore();
+  const { mutate, isPending } = useUpdateStoreStatus();
 
   if (isLoading) {
     return <TopProgressBar isPending={isLoading} />;
@@ -30,25 +36,25 @@ const Dashboard = () => {
       {/* should not scroll */}
       <div className="flex-1 overflow-hidden flex flex-col gap-2 md:gap-4  scrollbar-none h-[94%] relative">
         <Card className="w-full flex md:p-2 pb-2 shrink-0 sticky top-0 gap-0 py-2 md:py-auto">
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 items-center justify-between w-full px-0  pb-2">
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 items-center justify-between w-full px-1 pr-2  pb-2">
             <div className="flex items-center gap-2 h-full">
               <HugeiconsIcon
-                icon={ShoppingBagFavoriteFreeIcons}
-                className="p-1 rounded-md size-10 bg-accent"
+                icon={Store}
+                className="p-1 rounded-md size-12 bg-accent"
               />
-              <div className="-space-y-1">
-                <h3 className="text-base font-medium text-primary">
+              <div>
+                <h3 className="text-lg font-medium text-primary">
                   {data?.name || ""}
                 </h3>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground">
                   {data?.status === "OPEN"
                     ? "Actively accenting orders"
                     : "Not accepting orders"}
                 </p>
               </div>
             </div>
-            <div className="hidden md:flex items-center justify-between md:justify-end gap-2 pt-2 md:py-0">
-              <p className="uppercase text-sm font-medium">
+            <div className="hidden md:flex items-center justify-between md:justify-end gap-4 pt-2 md:py-0">
+              <p className="uppercase  font-medium">
                 Store Status:{" "}
                 <span
                   className={`${data?.status === "OPEN" ? "text-green-500" : "text-red-500"}`}
@@ -56,13 +62,32 @@ const Dashboard = () => {
                   {data?.status === "OPEN" ? "OPEN" : "CLOSED"}
                 </span>
               </p>
-              <Switch
-                checked={data?.status === "OPEN"}
-                onCheckedChange={() => {
-                  // TODO: implement store status change
-                }}
-              />
-              <Button>Manage Schedule</Button>
+              <div className="relative inline-flex items-center">
+                <Switch
+                  className="scale-125"
+                  disabled={isPending}
+                  checked={data?.status === "OPEN"}
+                  onCheckedChange={() => {
+                    if (!data?.id) return;
+                    mutate({ id: data.id });
+                  }}
+                />
+
+                {isPending && (
+                  <div
+                    className={cn(
+                      "absolute top-1/2 -translate-y-1/2 flex items-center justify-center",
+                      data?.status === "OPEN" ? "left-0.5" : "right-0.5",
+                    )}
+                  >
+                    <HugeiconsIcon
+                      color={data?.status === "OPEN" ? "#000" : "#fff"}
+                      icon={LoaderCircle}
+                      className="h-3.5 w-3.5 animate-spin"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </CardContent>
           <CardFooter className="md:hidden p-2">

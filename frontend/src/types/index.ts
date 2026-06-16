@@ -41,3 +41,41 @@ export type ApiResponse<T> = {
   message: string;
   data: T;
 };
+
+//  "totalDocs": 2,
+//     "totalPages": 1,
+//     "hasNextPage": false,
+//     "hasPrevPage": false,
+//     "nextPage": null,
+//     "prevPage": null,
+//     "page": 1,
+//     "limit": 10,
+//     "startIndex": 1,
+//     "endIndex": 2
+
+export type PaginatedApiResponse<T> = {
+  docs: T[];
+  totalDocs: number;
+  limit: number;
+  page: number;
+  totalPages: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: number | null;
+  nextPage: number | null;
+  startIndex: number;
+  endIndex: number;
+};
+
+export type Paginate = {
+  totalDocs: number;
+  limit: number;
+  page: number;
+  totalPages: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: number | null;
+  nextPage: number | null;
+  startIndex: number;
+  endIndex: number;
+};
