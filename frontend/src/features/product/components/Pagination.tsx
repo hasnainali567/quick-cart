@@ -18,7 +18,7 @@ export function Pagination({ paginate, onPageChange }: Props) {
 
   return (
     <BasePagination className="max-w-fit! mx-2!">
-      <PaginationContent className="w-fit! mx-2!">
+      <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
             onClick={(e) => {

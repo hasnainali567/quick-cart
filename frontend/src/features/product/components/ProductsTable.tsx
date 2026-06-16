@@ -108,7 +108,7 @@ const columns: TableColumn<StoreProducts>[] = [
 ];
 
 const ProductsTable = ({ docs, ...pagination }: Props) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const onPageChange = (page: number) => {
     setSearchParams((prev) => {

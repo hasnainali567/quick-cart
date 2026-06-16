@@ -24,7 +24,7 @@ import { useSearchParams } from "react-router-dom";
 const Products = () => {
   const [params] = useSearchParams();
   const page = Number(params.get("page")) || 1;
-  const take = Number(params.get("take")) || 10;
+  const take = Number(params.get("take")) || 1;
 
   console.log(page, take);
 
