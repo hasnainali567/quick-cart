@@ -7,7 +7,11 @@ import {
   deleteFromCloudinary,
   uploadToCloudinaryMultiple,
 } from "../../../utils/cloudinary.js";
-import { generateSkuCode, getPagination } from "../../helpers.js";
+import {
+  buildPagination,
+  generateSkuCode,
+  getPagination,
+} from "../../helpers.js";
 
 export const getAllProducts = asynHandler(async (req, res) => {
   const { id } = req.user;
@@ -66,6 +70,12 @@ export const getAllProducts = asynHandler(async (req, res) => {
         status: true,
         adminStatus: true,
         images: true,
+        category: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
         isActive: true,
         variants: {
           select: {
@@ -84,12 +94,15 @@ export const getAllProducts = asynHandler(async (req, res) => {
     }),
   ]);
 
-  const totalPages = Math.ceil(productCount / take);
-  const hasNextPage = skip + take < productCount;
+  const pagination = buildPagination(productCount, skip, take);
 
   return new ApiResponse(
     200,
-    { products, totalPages, productCount, hasNextPage },
+    {
+      docs: products,
+      totalDocs: productCount,
+      ...pagination,
+    },
     "Products fetched successfully",
   ).send(res);
 });
