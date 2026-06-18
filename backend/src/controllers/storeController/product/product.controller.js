@@ -162,6 +162,22 @@ export const createProduct = asynHandler(async (req, res) => {
     throw new BadRequestError("Product with the same name already exists");
   }
 
+  const storeCategory = await prisma.storeCategory.findFirst({
+    where: {
+      categoryId: categoryId,
+      store: {
+        ownerId: id,
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!storeCategory) {
+    throw new NotFoundError("Category not found for the store");
+  }
+
   const uploadedImages = await uploadToCloudinaryMultiple(images, {
     folder: "products",
     minFiles: 3,

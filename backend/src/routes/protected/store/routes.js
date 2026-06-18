@@ -18,6 +18,7 @@ import { uploadSingleImage } from "../../../middlewares/multer.middleware.js";
 import productRouter from "./product/routes.js";
 import { allowRoles } from "../../../middlewares/auth.middleware.js";
 import orderRouter from "./order/routes.js";
+import storeCategoryRouter from "./category/routes.js";
 const storeAdminRouter = Router();
 
 storeAdminRouter.post("/register", registerStore);
@@ -27,6 +28,7 @@ storeAdminRouter.get("/", getStore);
 storeAdminRouter.get("/review", getStoreReview);
 //Product Routes
 storeAdminRouter.use("/products", productRouter);
+storeAdminRouter.use("/category", storeCategoryRouter);
 
 //Order Routes
 storeAdminRouter.use("/orders", orderRouter);

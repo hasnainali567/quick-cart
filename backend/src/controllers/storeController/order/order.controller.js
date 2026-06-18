@@ -1,15 +1,9 @@
 import prisma from "../../../lib/prisma.js";
 import { asynHandler } from "../../../utils/asyncHandler.js";
 import { ApiResponse } from "../../../utils/apiResponse.js";
-import slugify from "slugify";
 import { BadRequestError, NotFoundError } from "../../../utils/errors.js";
-import {
-  deleteFromCloudinary,
-  uploadToCloudinaryMultiple,
-} from "../../../utils/cloudinary.js";
-import { generateSkuCode, getPagination } from "../../helpers.js";
+import { getPagination } from "../../helpers.js";
 import notify from "../../../utils/notify.js";
-// import { addDriverAssignmentJob } from "../../../jobs/driver.assignment.js";
 
 export const acceptOrder = asynHandler(async (req, res) => {
   const { orderId } = req.params;
