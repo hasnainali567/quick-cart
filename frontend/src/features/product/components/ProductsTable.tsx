@@ -12,10 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { StockIndicator } from "./StockIndicator";
 import { Pagination } from "./Pagination";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Pen, Trash2, Visible } from "@hugeicons/core-free-icons";
 import { useSearchParams } from "react-router-dom";
+import ProductActions from "./ProductActions";
 
 type Props = PaginatedApiResponse<StoreProducts>;
 
@@ -77,9 +75,8 @@ const columns: TableColumn<StoreProducts>[] = [
     render: (row) => (
       <Badge
         variant={"default"}
-        className={`capitalize ${
-          row.status === "ACTIVE" ? "bg-[#4edea3]" : "bg-[#ffb4ab]"
-        }`}
+        className={`capitalize ${row.status === "ACTIVE" ? "bg-[#4edea3]" : "bg-[#ffb4ab]"
+          }`}
       >
         {row.status.toLowerCase()}
       </Badge>
@@ -88,21 +85,8 @@ const columns: TableColumn<StoreProducts>[] = [
   {
     key: "actions",
     title: "Actions",
-    render: () => (
-      <div>
-        <Button variant={"ghost"}>
-          <HugeiconsIcon icon={Pen} />
-        </Button>
-        <Button
-          variant={"ghost"}
-          className="text-[#ffb4ab] hover:text-[#ffb4ab] hover:bg-[#ffb4ab]/60"
-        >
-          <HugeiconsIcon icon={Trash2} />
-        </Button>
-        <Button variant={"ghost"}>
-          <HugeiconsIcon icon={Visible} />
-        </Button>
-      </div>
+    render: (row) => (
+      <ProductActions slug={row.slug} />
     ),
   },
 ];
