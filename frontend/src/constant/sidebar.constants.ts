@@ -1,6 +1,7 @@
 import type { MenuItem } from "@/types";
 import {
   Boxes,
+  CatalogueIcon,
   DashboardSquareIcon,
   Money,
   Setting06Icon,
@@ -17,6 +18,11 @@ const StoreMenuItems: MenuItem[] = [
     to: "/store/products",
     label: "Products",
     icon: Boxes,
+  },
+  {
+    to: "/store/categories",
+    label: "Categories",
+    icon: CatalogueIcon,
   },
   {
     to: "/store/earnings",

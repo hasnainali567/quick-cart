@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetStoreOrders } from "@/hooks/use-query";
 import type { TableColumn } from "@/types";
-import type { StoreOrder } from "@/types/store.types";
 import { Dots, Edit, Eye, Trash } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -12,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import OrderSheet from "@/components/store/global/OrderSheet";
 import Dropdown from "@/components/global/dropdown";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { StoreOrder } from "@/types/order.types";
 
 const RecentOrders = () => {
   const { data, isLoading } = useGetStoreOrders({ skip: 0, take: 10 });
@@ -54,6 +55,11 @@ const RecentOrders = () => {
       key: "status",
       title: "Status",
       render: (row) => <Badge>{row.status}</Badge>,
+    },
+    {
+      key: "total",
+      title: "Sub total",
+      render: (row) => `PKR ${row.total.toFixed(2)}`,
     },
     {
       key: "actions",
@@ -103,7 +109,7 @@ const RecentOrders = () => {
   ];
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Skeleton className="w-full h-80" />;
   }
 
   if (!data) {

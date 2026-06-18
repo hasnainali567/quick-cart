@@ -1,6 +1,5 @@
 import Sheet from "@/components/global/Sheet";
 import { useGetStoreOrdersById } from "@/hooks/use-query";
-import type { StoreOrder } from "@/types/store.types";
 import OrderSheetSkeleton from "../Skeletons/OrderSheetSkeleton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -9,6 +8,7 @@ import Avatar from "@/components/global/Avatar";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Mail, Truck } from "@hugeicons/core-free-icons";
+import type { StoreOrder } from "@/types/order.types";
 
 type SheetProps = {
   open: boolean;
@@ -18,7 +18,6 @@ type SheetProps = {
 
 const OrderSheet = ({ open, onOpenChange, orderId }: SheetProps) => {
   const { data: order, isLoading } = useGetStoreOrdersById(orderId);
-  console.log(order, orderId);
 
   return (
     <Sheet
@@ -74,7 +73,7 @@ const OrderSheet = ({ open, onOpenChange, orderId }: SheetProps) => {
                   disabled={order.status !== "PENDING"}
                   className="w-full"
                   variant={"outline"}
-                  onClick={order.status === "PENDING" ? () => {} : () => {}}
+                  onClick={order.status === "PENDING" ? () => { } : () => { }}
                 >
                   Reject Order
                 </Button>
