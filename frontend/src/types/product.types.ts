@@ -32,3 +32,22 @@ export type StoreProducts = {
   avgRating: number;
   lowStockAlert: number;
 };
+
+export type CreateProductInput = {
+  name: string;
+  description?: string;
+  categoryId: string;
+  unit: string;
+  weight?: number;
+  sku: string;
+  barcode?: string;
+  stock: number;
+  lowStockAlert: number;
+  price: number;
+  salePrice?: number;
+  costPrice?: number;
+  isActive: boolean;
+  isFeatured: boolean;
+  isOrganic: boolean;
+  images: File[];
+};

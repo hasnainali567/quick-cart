@@ -21,14 +21,18 @@ export const generateSkuCode = (productName) => {
   return `${namePart}-${randomString}`;
 };
 
-export const buildPagination = (totalDocs, page, limit) => {
-  const safeTotalDocs = Math.max(0, parseInt(totalDocs, 10) || 0);
-  const safePage = Math.max(1, parseInt(page, 10) || 1);
-  const safeLimit = Math.max(1, parseInt(limit, 10) || 10);
+export const buildPagination = (totalDocs, skip, take) => {
+  const safeTotalDocs = Math.max(0, Number(totalDocs) || 0);
+  const safeSkip = Math.max(0, Number(skip) || 0);
+  const safeTake = Math.max(1, Number(take) || 10);
 
-  const totalPages = Math.ceil(safeTotalDocs / safeLimit);
+  const safePage = Math.floor(safeSkip / safeTake) + 1;
+
+  const totalPages = Math.ceil(safeTotalDocs / safeTake);
+
   const hasNextPage = safePage < totalPages;
   const hasPrevPage = safePage > 1;
+
   const nextPage = hasNextPage ? safePage + 1 : null;
   const prevPage = hasPrevPage ? safePage - 1 : null;
 
@@ -38,10 +42,13 @@ export const buildPagination = (totalDocs, page, limit) => {
     hasPrevPage,
     nextPage,
     prevPage,
+
     page: safePage,
-    limit: safeLimit,
+    take: safeTake,
+
     totalDocs: safeTotalDocs,
-    startIndex: (safePage - 1) * safeLimit + 1,
-    endIndex: Math.min(safePage * safeLimit, safeTotalDocs),
+
+    startIndex: safeSkip + 1,
+    endIndex: Math.min(safeSkip + safeTake, safeTotalDocs),
   };
 };

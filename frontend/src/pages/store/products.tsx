@@ -19,14 +19,12 @@ import useGetStoreProducts from "@/features/product/hooks/useGetStoreProducts";
 import { cn } from "@/lib/utils";
 import { Plus, Search } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Products = () => {
   const [params] = useSearchParams();
   const page = Number(params.get("page")) || 1;
-  const take = Number(params.get("take")) || 1;
-
-  console.log(page, take);
+  const take = Number(params.get("take")) || 10;
 
   const { data } = useGetStoreProducts({ page, take });
   if (!data) {
@@ -42,9 +40,11 @@ const Products = () => {
             Manage your inventory, tracking and product statuses
           </p>
         </div>
-        <Button>
-          <HugeiconsIcon icon={Plus} />
-          Add Product
+        <Button asChild>
+          <Link to={"/store/add-product"}>
+            <HugeiconsIcon icon={Plus} />
+            Add Product
+          </Link>
         </Button>
       </div>
       <Card>

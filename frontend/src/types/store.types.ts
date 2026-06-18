@@ -36,3 +36,15 @@ export type Store = {
   updatedAt: string;
   workingDays: string[];
 };
+
+export type Category = {
+  id: string;
+  name: string;
+  icon: string;
+  isActve: boolean;
+};
+
+export type StoreCategory = {
+  id: string;
+  category: Category;
+};
