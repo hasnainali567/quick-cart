@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
 type SheetProps<T> = {
   data: T;
   children: (data: T) => React.ReactNode;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   trigger?: React.ReactNode;
   title: string;
   description: string;
