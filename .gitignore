@@ -1,0 +1,9 @@
+# Ignore everything at the root level
+/*
+
+# But keep these folders and their contents
+!/frontend/
+!/backend/
+
+# Also keep this file itself
+!.gitignore

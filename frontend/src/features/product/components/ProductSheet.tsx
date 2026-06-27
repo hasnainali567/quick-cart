@@ -1,6 +1,6 @@
 import Sheet from "@/components/global/Sheet";
 import useGetStoreProduct from "../hooks/useGetStoreProduct";
-import { useEffect } from "react";
+import { useState } from "react";
 
 type Props = {
   slug: string;
@@ -9,16 +9,14 @@ type Props = {
   trigger: React.ReactNode;
 };
 
-const ProductSheet = ({ slug, open, onOpenChange, trigger }: Props) => {
+const ProductSheet = ({ slug, trigger }: Props) => {
+  const [open, setOpen] = useState(false);
   const { data, isLoading } = useGetStoreProduct({
     slug,
     enabled: open ? true : false,
   });
 
-  useEffect(() => {
-    if (!open) return;
-    console.log(data);
-  }, [data]);
+  console.log(data, isLoading);
 
   return (
     <Sheet
@@ -26,8 +24,8 @@ const ProductSheet = ({ slug, open, onOpenChange, trigger }: Props) => {
       title={"Product"}
       description={"product name is you name"}
       key={"product"}
+      onOpenChange={setOpen}
       open={open}
-      onOpenChange={onOpenChange}
       trigger={trigger}
     >
       {() => <div></div>}

@@ -29,6 +29,7 @@ const columns: TableColumn<StoreProducts>[] = [
     render: (row) => (
       <div className="flex items-center gap-2 ">
         <img
+          loading="lazy"
           src={row.images[0]}
           alt={row.name}
           className="size-10 rounded-md shadow-2xs box-border border"
@@ -75,8 +76,9 @@ const columns: TableColumn<StoreProducts>[] = [
     render: (row) => (
       <Badge
         variant={"default"}
-        className={`capitalize ${row.status === "ACTIVE" ? "bg-[#4edea3]" : "bg-[#ffb4ab]"
-          }`}
+        className={`capitalize ${
+          row.status === "ACTIVE" ? "bg-[#4edea3]" : "bg-[#ffb4ab]"
+        }`}
       >
         {row.status.toLowerCase()}
       </Badge>
@@ -85,9 +87,7 @@ const columns: TableColumn<StoreProducts>[] = [
   {
     key: "actions",
     title: "Actions",
-    render: (row) => (
-      <ProductActions slug={row.slug} />
-    ),
+    render: (row) => <ProductActions slug={row.slug} id={row.id} />,
   },
 ];
 

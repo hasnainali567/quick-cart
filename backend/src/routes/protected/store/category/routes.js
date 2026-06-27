@@ -2,11 +2,13 @@ import { Router } from "express";
 import {
   addCategorytoStore,
   getCategories,
-} from "../../../../controllers/storeController/category/category.contorller";
+  deleteCategoryFromStore,
+} from "../../../../controllers/storeController/category/category.controller.js";
 
 const storeCategoryRouter = Router();
 
 storeCategoryRouter.get("/", getCategories);
 storeCategoryRouter.post("/:categoryId", addCategorytoStore);
+storeCategoryRouter.delete("/:categoryId", deleteCategoryFromStore);
 
 export default storeCategoryRouter;

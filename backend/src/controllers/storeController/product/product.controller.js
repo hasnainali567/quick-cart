@@ -120,6 +120,7 @@ export const createProduct = asynHandler(async (req, res) => {
     salePrice,
     unit,
     tags,
+    status = "ACTIVE",
   } = req.body;
   const slug = slugify(name, { lower: true, strict: true, trim: true });
   const images = req.files?.images || [];
@@ -206,6 +207,7 @@ export const createProduct = asynHandler(async (req, res) => {
           description,
           categoryId,
           slug,
+          status: status === "ACTIVE" ? "ACTIVE" : "INACTIVE",
           price: Number(price),
           stock: stock !== undefined ? Number(stock) : undefined,
           costPrice: costPrice !== undefined ? Number(costPrice) : undefined,
@@ -231,6 +233,24 @@ export const createProduct = asynHandler(async (req, res) => {
                 })),
               }
             : undefined,
+        },
+        select: {
+          name: true,
+          id: true,
+          status: true,
+          stock: true,
+          images: true,
+          isActive: true,
+          slug: true,
+          adminStatus: true,
+          category: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          avgRating: true,
+          lowStockAlert: true,
         },
       });
     });
@@ -330,9 +350,17 @@ export const deleteProduct = asynHandler(async (req, res) => {
 
   await prisma.product.delete({
     where: {
-      id: productId,
+      id: product.id,
     },
   });
+
+  await Promise.allSettled(
+    product.images.map((image) =>
+      deleteFromCloudinary(image, {
+        resourceType: "image",
+      }),
+    ),
+  );
 
   return new ApiResponse(200, null, "Product deleted successfully").send(res);
 });

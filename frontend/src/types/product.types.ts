@@ -1,3 +1,34 @@
+export type Product = {
+  stock: number;
+  status: Status;
+  adminStatus: AdminStatus;
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  avgRating: number;
+  totalReviews: number;
+  createdAt: Date;
+  updatedAt: Date;
+  isActive: boolean;
+  storeId: string;
+  categoryId: string;
+  images: string[];
+  sku: string | null;
+  barcode: string | null;
+  unit: string | null;
+  price: number;
+  salePrice: number | null;
+  costPrice: number | null;
+  lowStockAlert: number;
+  isFeatured: boolean;
+  isOrganic: boolean;
+  totalSold: number;
+  weight: number | null;
+  expiryDate: Date | null;
+  tags: string[];
+};
+
 type ProductVariant = {
   id: string;
   name: string;
@@ -50,4 +81,5 @@ export type CreateProductInput = {
   isFeatured: boolean;
   isOrganic: boolean;
   images: File[];
+  tags?: string[];
 };

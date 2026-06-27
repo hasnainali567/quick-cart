@@ -53,7 +53,7 @@ const Sidebar = ({ menuItems, menuLabel, user, footerMenuItems }: Props) => {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((menuItem) => (
-                <SidebarMenuItem>
+                <SidebarMenuItem key={menuItem.to}>
                   <NavLink to={menuItem.to}>
                     {({ isActive }) => (
                       <SidebarMenuButton

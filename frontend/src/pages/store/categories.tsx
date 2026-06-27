@@ -1,9 +1,15 @@
-import React from 'react'
+import CategoriesHeader from "@/features/category/components/CategoriesHeader";
+import CategoryGrid from "@/features/category/components/CategoryGrid";
+import StoreCategories from "@/features/category/components/StoreCategories";
 
-const Categories = () => {
-    return (
-        <div>Categories</div>
-    )
-}
+const CategoriesPage = () => {
+  return (
+    <div className="space-y-6 p-4 overflow-y-auto scrollbar-none">
+      <CategoriesHeader />
+      <StoreCategories />
+      <CategoryGrid />
+    </div>
+  );
+};
 
-export default Categories
+export default CategoriesPage;

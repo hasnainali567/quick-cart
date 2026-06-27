@@ -34,7 +34,7 @@ const SidebarFooter = ({ user, footerItems }: Props) => {
   return (
     <SidebarMenu>
       {footerItems?.map((item) => (
-        <SidebarMenuItem>
+        <SidebarMenuItem key={item.to}>
           <NavLink to={item.to}>
             {({ isActive }) => (
               <SidebarMenuButton

@@ -1,27 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { AddProductForm } from "@/features/product/components/AddProductForm";
-import { Back } from "@hugeicons/core-free-icons";
+import { Back, LoaderCircle } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import type { CreateProductInput } from "@/types/product.types";
+import useCreateProduct from "@/features/product/hooks/useCreateProduct";
 
 const AddProduct = () => {
   const navigate = useNavigate();
 
-  const handleSaveProduct = async (data: CreateProductInput) => {
-    const promise = new Promise((resolve) => setTimeout(resolve, 1500));
+  const { mutateAsync, isPending } = useCreateProduct();
 
-    toast.promise(promise, {
+  const handleSaveProduct = async (data: CreateProductInput) => {
+    toast.promise(mutateAsync(data), {
       loading: "Saving product details...",
       success: () => {
-        navigate("/store/products");
         return `Product "${data.name}" added successfully!`;
       },
       error: "Error adding product.",
     });
-
-    console.log("Saving Product:", data);
   };
 
   return (
@@ -37,8 +35,15 @@ const AddProduct = () => {
           <Button variant={"outline"} onClick={() => navigate(-1)}>
             Discard
           </Button>
-          <Button type="submit" form="add-product-form">
-            Save Product
+          <Button type="submit" form="add-product-form" disabled={isPending}>
+            {isPending ? (
+              <div className="flex items-center gap-2">
+                <HugeiconsIcon icon={LoaderCircle} />
+                Saving...
+              </div>
+            ) : (
+              "Save Product"
+            )}
           </Button>
         </div>
       </div>

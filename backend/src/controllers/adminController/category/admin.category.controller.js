@@ -3,7 +3,11 @@ import ApiResponse from "../../../utils/apiResponse.js";
 import { asynHandler } from "../../../utils/asyncHandler.js";
 import { NotFoundError } from "../../../utils/errors.js";
 import { uploadToCloudinary } from "../../../utils/cloudinary.js";
-import { getPagination, getSuccessMessage } from "../../helpers.js";
+import {
+  getNotFoundMessage,
+  getPagination,
+  getSuccessMessage,
+} from "../../helpers.js";
 import slugify from "slugify";
 
 export const getAllCategories = asynHandler(async (req, res) => {

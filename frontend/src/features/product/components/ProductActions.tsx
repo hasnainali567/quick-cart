@@ -1,24 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Pen, Trash2, Visible } from "@hugeicons/core-free-icons";
+import { Dots, Pen, Trash2, Visible } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import ProductSheet from "./ProductSheet";
+import ProductDeleteDialog from "./ProductDeleteDialog";
 
 type Props = {
   slug: string;
+  id: string;
 };
 
-const ProductActions = ({ slug }: Props) => {
+const ProductActions = ({ slug, id }: Props) => {
   return (
     <div>
-      <Button variant={"ghost"}>
-        <HugeiconsIcon icon={Pen} />
-      </Button>
-      <Button
-        variant={"ghost"}
-        className="text-[#ffb4ab] hover:text-[#ffb4ab] hover:bg-[#ffb4ab]/60"
-      >
-        <HugeiconsIcon icon={Trash2} />
-      </Button>
       <ProductSheet
         slug={slug}
         trigger={
@@ -27,6 +20,20 @@ const ProductActions = ({ slug }: Props) => {
           </Button>
         }
       />
+      <ProductDeleteDialog
+        id={id}
+        trigger={
+          <Button
+            variant={"ghost"}
+            className="text-[#ffb4ab] hover:text-[#ffb4ab] hover:bg-[#ffb4ab]/60"
+          >
+            <HugeiconsIcon icon={Trash2} />
+          </Button>
+        }
+      />
+      <Button variant={"ghost"}>
+        <HugeiconsIcon icon={Dots} className="rotate-90" />
+      </Button>
     </div>
   );
 };

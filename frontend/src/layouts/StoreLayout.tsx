@@ -8,36 +8,43 @@ import {
 import { useGetStore } from "@/hooks/use-query";
 import { useSession } from "@/lib/auth";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const StoreLayout = () => {
   const navigate = useNavigate();
   const { data, isPending } = useSession();
-  const { data: store } = useGetStore();
+  const { data: store, isPending: isStorePending } = useGetStore();
 
   const user = data && data.user;
 
-  if (!data && !isPending) {
-    navigate("/", { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (isPending) return;
 
-  if (user && user.role !== "STORE_ADMIN") {
-    navigate("/", { replace: true });
-    return null;
-  }
+    if (!user) {
+      navigate("/login", { replace: true });
+      return;
+    }
 
-  if (!user) {
-    navigate("/login", { replace: true });
-    return null;
-  }
+    if (user.role !== "STORE_ADMIN") {
+      navigate("/", { replace: true });
+      return;
+    }
 
-  if (!store && !isPending) {
-    navigate("/", { replace: true });
-    return null;
-  }
+    if (isStorePending) return;
+
+    if (!store) {
+      navigate("/", { replace: true });
+      return;
+    }
+  }, [isPending, user, isStorePending, store, navigate]);
+
+  if (isPending) return null;
+  if (!user || user.role !== "STORE_ADMIN") return null;
+  
+  if (isStorePending) return null;
+  if (!store) return null;
 
   return (
-    // should not scroll
     <SidebarProvider>
       <Sidebar
         user={user}

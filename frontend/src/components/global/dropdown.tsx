@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,12 +19,13 @@ const Dropdown = ({ trigger, items, align, className }: dropdownMenuProps) => {
           <>
             {item.isSeparator && <DropdownMenuSeparator key={item.key} />}
             {item.onClick ? (
-              <DropdownMenuItem asChild key={item.key}>
-                <Button
-                  onClick={item.onClick}
-                  variant={item.variant}
-                  className="w-full"
-                >
+              <DropdownMenuItem
+                className="min-w-fit shrink-0"
+                asChild
+                key={item.key}
+                variant={item.variant}
+              >
+                <Button onClick={item.onClick} className="w-full">
                   <HugeiconsIcon icon={item.icon} />
                   {item.label}
                 </Button>

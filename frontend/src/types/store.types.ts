@@ -42,9 +42,24 @@ export type Category = {
   name: string;
   icon: string;
   isActve: boolean;
+  image: string;
+  slug: string;
+  description: string;
+  _count: {
+    products: number;
+  };
 };
 
 export type StoreCategory = {
   id: string;
   category: Category;
+};
+
+export type AddedStoreCategory = {
+  id: string;
+  category: {
+    name: string;
+    icon: string;
+    description?: string;
+  };
 };
