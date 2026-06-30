@@ -1,7 +1,7 @@
-import cors from 'cors'
-import { env } from '../config/env.js'
+import cors from "cors";
+import { env } from "../config/env.js";
 
 export const corsMiddleware = cors({
-    origin: [env.frontendUrl],
-    credentials: true,
-})
+  origin: [env.frontendUrl, env.mobileAppUrl],
+  credentials: true,
+});
