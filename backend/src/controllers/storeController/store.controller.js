@@ -113,7 +113,7 @@ export const registerStore = asynHandler(async (req, res) => {
 
 export const updateStore = asynHandler(async (req, res) => {
     const { user } = req;
-    const { name, slug, description, phone, email, area, city, latitude, longitude, serviceRadiusKm, minimumOrderAmount, freeDeliveryAbove, openingTime, closingTime, workingDays } = req.body;
+    const { name, slug, description, phone, email, area, city, latitude, longitude, serviceRadiusKm, minimumOrderAmount, freeDeliveryAbove, deliveryFee, openingTime, closingTime, workingDays } = req.body;
 
     const store = await prisma.$transaction(async (tx) => {
         const store = await tx.store.findUnique({
@@ -139,6 +139,7 @@ export const updateStore = asynHandler(async (req, res) => {
                 serviceRadiusKm,
                 minimumOrderAmount,
                 freeDeliveryAbove,
+                deliveryFee,
                 openingTime,
                 closingTime,
                 workingDays,

@@ -18,6 +18,7 @@ export type Store = {
   id: string;
   isVerified: boolean;
   latitude: number;
+  longitude: number;
   logo: string | null;
   minimumOrderAmount: number;
   name: string;

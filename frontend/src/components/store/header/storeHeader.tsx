@@ -1,19 +1,17 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { User } from "@/types";
 import {
-  Bell,
   Circle,
   CustomerSupportIcon,
-  Loader,
   LoaderCircle,
   Search,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Link } from "react-router-dom";
 import Avatar from "./avatar";
+import NotificationDropdown from "./NotificationDropdown";
 import {
   InputGroup,
   InputGroupAddon,
@@ -108,16 +106,7 @@ const StoreHeader = ({ user, store }: Props) => {
         ) : (
           <Skeleton className="h-full w-20" />
         )}
-        <Button
-          variant={"ghost"}
-          asChild
-          className="aspect-square p-2 h-full relative"
-        >
-          <Link to={"/store/dashboard"} className="relative">
-            <Badge className="absolute -top-2 -right-2">9+</Badge>
-            <HugeiconsIcon className="size-5" icon={Bell} />
-          </Link>
-        </Button>
+        <NotificationDropdown />
         <Button variant={"ghost"} asChild className="aspect-square p-2 h-full">
           <Link to={"/store/dashboard"}>
             <HugeiconsIcon className="size-5" icon={CustomerSupportIcon} />

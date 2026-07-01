@@ -2,7 +2,7 @@ import prisma from "../../../lib/prisma.js";
 import ApiResponse from "../../../utils/apiResponse.js";
 import { asynHandler } from "../../../utils/asyncHandler.js";
 import { NotFoundError } from "../../../utils/errors.js";
-import { getPagination, getSuccessMessage, getNotFoundMessage } from "../../helpers.js";
+import { buildPagination, getPagination, getSuccessMessage, getNotFoundMessage } from "../../helpers.js";
 
 const ADMIN_STATUS = ['PENDING', 'APPROVED', 'REJECTED', 'SUSPENDED']
 const PRODUCT_STATUS = ['ACTIVE', 'INACTIVE']
@@ -20,13 +20,21 @@ export const getAllProducts = asynHandler(async (req, res) => {
         throw new NotFoundError('Invalid product status provided')
     }
 
+    const where = {
+        adminStatus: status ? status.toUpperCase() : undefined,
+        status: productStatus ? productStatus.toUpperCase() : undefined,
+        category: category ? { slug: category } : undefined,
+        stock: inStock === 'true' ? { gt: 0 } : inStock === 'false' ? { equals: 0 } : lowStock === 'true' ? { lte: 10 } : undefined,
+        store: store ? { slug: store } : undefined
+    }
+
+    const totalDocs = await prisma.product.count({ where })
+
     const products = await prisma.product.findMany({
-        where: {
-            adminStatus: status ? status.toUpperCase() : undefined,
-            status: productStatus ? productStatus.toUpperCase() : undefined,
-            category: category ? { slug: category } : undefined,
-            stock: inStock === 'true' ? { gt: 0 } : lowStock === 'true' ? { lte: 10 } : undefined,
-            store: store ? { slug: store } : undefined
+        where,
+        include: {
+            store: { select: { id: true, name: true, slug: true } },
+            category: { select: { id: true, name: true, slug: true } }
         },
         orderBy: {
             price: price === 'asc' ? 'asc' : 'desc'
@@ -35,7 +43,9 @@ export const getAllProducts = asynHandler(async (req, res) => {
         take
     })
 
-    return new ApiResponse(200, products, getSuccessMessage('products')).send(res)
+    const pagination = buildPagination(totalDocs, skip, take)
+
+    return new ApiResponse(200, { docs: products, ...pagination }, getSuccessMessage('products')).send(res)
 })
 
 export const getStoresforProductFiltering = asynHandler(async (req, res) => {

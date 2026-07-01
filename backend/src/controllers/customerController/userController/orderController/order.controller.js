@@ -239,9 +239,16 @@ export const placeOrder = asyncHandler(async (req, res) => {
           select: {
             id: true,
             name: true,
+            image: true,
             quantity: true,
             unitPrice: true,
             totalPrice: true,
+            product: {
+              select: {
+                id: true,
+                images: true,
+              },
+            },
           },
         },
         store: {

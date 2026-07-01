@@ -116,6 +116,12 @@ export const getOrders = asynHandler(async (req, res) => {
           id: true,
         },
       },
+      items: {
+        select: {
+          id: true,
+          quantity: true,
+        },
+      },
       status: true,
       subtotal: true,
       total: true,
@@ -146,6 +152,13 @@ export const getOrderbyId = asynHandler(async (req, res) => {
     where: { id: orderId },
     select: {
       id: true,
+      status: true,
+      subtotal: true,
+      total: true,
+      promoCode: true,
+      promoDiscount: true,
+      createdAt: true,
+      updatedAt: true,
       customer: {
         select: {
           id: true,
@@ -157,13 +170,17 @@ export const getOrderbyId = asynHandler(async (req, res) => {
       },
       address: {
         select: {
+          fullName: true,
           addressLine1: true,
+          addressLine2: true,
           area: true,
           city: true,
+          province: true,
           country: true,
           phone: true,
+          label: true,
           id: true,
-          addressLine2: true,
+          isDefault: true,
         },
       },
       items: {

@@ -4,6 +4,7 @@ import { asynHandler } from "../../../utils/asyncHandler.js";
 import { NotFoundError } from "../../../utils/errors.js";
 import { uploadToCloudinary } from "../../../utils/cloudinary.js";
 import {
+  buildPagination,
   getNotFoundMessage,
   getPagination,
   getSuccessMessage,
@@ -13,16 +14,29 @@ import slugify from "slugify";
 export const getAllCategories = asynHandler(async (req, res) => {
   const { query } = req;
   const { take, skip } = getPagination(query);
+  const { search, isActive } = query;
+
+  const where = {
+    ...(search && { name: { contains: search, mode: "insensitive" } }),
+    ...(isActive !== undefined && { isActive: isActive === "true" }),
+  };
+
+  const totalDocs = await prisma.category.count({ where });
 
   const categories = await prisma.category.findMany({
+    where,
     take,
     skip,
     orderBy: { createdAt: "desc" },
   });
 
-  return new ApiResponse(200, categories, getSuccessMessage("categories")).send(
-    res,
-  );
+  const pagination = buildPagination(totalDocs, skip, take);
+
+  return new ApiResponse(
+    200,
+    { docs: categories, ...pagination },
+    getSuccessMessage("categories"),
+  ).send(res);
 });
 
 export const getCategorybyId = asynHandler(async (req, res) => {
@@ -151,20 +165,25 @@ export const toggleCategoryStatus = asynHandler(async (req, res) => {
   const { params } = req;
   const { id } = params;
 
+  const existing = await prisma.category.findUnique({
+    where: { id },
+    select: { isActive: true },
+  });
+
+  if (!existing) {
+    throw new NotFoundError(getNotFoundMessage("category"));
+  }
+
   const category = await prisma.category.update({
     where: { id },
     data: {
-      isActive: !category.isActive,
+      isActive: !existing.isActive,
     },
     select: {
       id: true,
       isActive: true,
     },
   });
-
-  if (!category) {
-    throw new NotFoundError(getNotFoundMessage("category"));
-  }
 
   return new ApiResponse(200, category, "Category updated successfully").send(
     res,

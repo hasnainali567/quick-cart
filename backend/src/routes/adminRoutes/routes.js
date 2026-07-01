@@ -11,7 +11,7 @@ adminRouter.use('/store', (await import('./store/routes.js')).default)
 adminRouter.use('/product', (await import('./product/routes.js')).default)
 adminRouter.use('/category', (await import('./category/routes.js')).default)
 adminRouter.use('/driver', (await import('./driver/routes.js')).default)
-
-
+adminRouter.use('/dashboard', (await import('./dashboard/routes.js')).default)
+adminRouter.use('/settings', (await import('./settings/routes.js')).default)
 
 export default adminRouter;

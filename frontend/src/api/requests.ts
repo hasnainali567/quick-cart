@@ -39,3 +39,16 @@ export const deleteRequest = async <TResponse, TBody = void>(options: {
 
   return res.data.data;
 };
+
+export const uploadRequest = async <TResponse>(options: {
+  url: string;
+  file: File;
+  fieldName?: string;
+}): Promise<TResponse> => {
+  const formData = new FormData();
+  formData.append(options.fieldName || "file", options.file);
+  const res = await api.patch<ApiResponse<TResponse>>(options.url, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data.data;
+};

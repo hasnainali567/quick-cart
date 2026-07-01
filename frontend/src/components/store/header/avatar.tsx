@@ -6,6 +6,7 @@ import {
 import type { User, dropdownItem } from "@/types";
 import { Logout, Profile, Store } from "@hugeicons/core-free-icons";
 import Dropdown from "@/components/global/dropdown";
+import { signOut } from "@/lib/auth";
 
 type Props = {
   user: User;
@@ -27,7 +28,7 @@ const items: dropdownItem[] = [
   {
     label: "Logout",
     icon: Logout,
-    onClick: () => {},
+    onClick: () => signOut(),
     key: "logout",
     variant: "destructive",
     isSeparator: true,

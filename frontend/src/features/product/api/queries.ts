@@ -25,7 +25,7 @@ export const getStoreProducts = async ({
 };
 
 export const getStoreProduct = async ({ slug }: { slug: string }) => {
-  const res = await getRequest<ApiResponse<unknown>>({
+  const res = await getRequest<StoreProducts>({
     url: `store/products/${slug}`,
   });
   return res;

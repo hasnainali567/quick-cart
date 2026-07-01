@@ -2,24 +2,46 @@ import prisma from "../../../lib/prisma.js";
 import ApiResponse from "../../../utils/apiResponse.js";
 import { asynHandler } from "../../../utils/asyncHandler.js";
 import { NotFoundError } from "../../../utils/errors.js";
-import { getPagination, getSuccessMessage, getNotFoundMessage } from "../../helpers.js";
+import { buildPagination, getPagination, getSuccessMessage, getNotFoundMessage } from "../../helpers.js";
 
 
 export const getAllDrivers = asynHandler(async (req, res) => {
     const { query } = req;
     const { skip, take } = getPagination(query);
-    const { status, approvalStatus } = query;
+    const { status, approvalStatus, search } = query;
+
+    const where = {
+        ...(status && { status }),
+        ...(approvalStatus && { approvalStatus }),
+        ...(search && {
+            user: {
+                OR: [
+                    { name: { contains: search, mode: 'insensitive' } },
+                    { email: { contains: search, mode: 'insensitive' } },
+                ]
+            }
+        })
+    };
+
+    const totalDocs = await prisma.driver.count({ where });
 
     const drivers = await prisma.driver.findMany({
-        where: {
-            ...(status && { status }),
-            ...(approvalStatus && { approvalStatus })
-        },
+        where,
         skip,
         take,
         orderBy: { createdAt: 'desc' },
         select: {
             id: true,
+            userId: true,
+            status: true,
+            approvalStatus: true,
+            vehicleType: true,
+            vehicleName: true,
+            vehicleNumber: true,
+            totalDeliveries: true,
+            avgRating: true,
+            totalEarnings: true,
+            createdAt: true,
             user: {
                 select: {
                     name: true,
@@ -29,12 +51,12 @@ export const getAllDrivers = asynHandler(async (req, res) => {
                     phone: true
                 }
             },
-            status: true,
-            approvalStatus: true
         }
     })
 
-    return new ApiResponse(200, drivers, getSuccessMessage('drivers')).send(res);
+    const pagination = buildPagination(totalDocs, skip, take);
+
+    return new ApiResponse(200, { docs: drivers, ...pagination }, getSuccessMessage('drivers')).send(res);
 })
 
 export const getDriverById = asynHandler(async (req, res) => {
@@ -57,7 +79,7 @@ export const approveDriver = asynHandler(async (req, res) => {
 
     const driver = await prisma.driver.update({
         where: { id },
-        data: { status: 'APPROVED' },
+        data: { approvalStatus: 'APPROVED' },
         select: {
             id: true,
             approvalStatus: true
@@ -74,14 +96,14 @@ export const approveDriver = asynHandler(async (req, res) => {
 export const rejectDriver = asynHandler(async (req, res) => {
     const { id } = req.params;
 
-    // check if driver already approved first if yes then throw you cant reject appreved driver intead suspend
+    // check if driver already approved first if yes then throw you cant reject approved driver instead suspend
 
     const checkForstatus = await prisma.driver.findUnique({
         where: { id },
-        select: { status: true }
+        select: { approvalStatus: true }
     })
 
-    if (checkForstatus.status === 'APPROVED') {
+    if (checkForstatus.approvalStatus === 'APPROVED') {
         return new ApiResponse(400, null, 'You cant reject approved driver instead suspend').send(res)
     }
 

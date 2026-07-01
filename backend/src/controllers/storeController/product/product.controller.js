@@ -17,7 +17,7 @@ export const getAllProducts = asynHandler(async (req, res) => {
   const { id } = req.user;
   const { query } = req;
   const { take, skip } = getPagination(query);
-  const { category, sort, inStock, lowStock, status, adminStatus } = query;
+  const { category, sort, inStock, lowStock, status, adminStatus, search, outOfStock } = query;
 
   const where = {
     store: {
@@ -27,6 +27,14 @@ export const getAllProducts = asynHandler(async (req, res) => {
       ? {
           category: {
             slug: String(category),
+          },
+        }
+      : {}),
+    ...(search
+      ? {
+          name: {
+            contains: String(search),
+            mode: "insensitive",
           },
         }
       : {}),
@@ -42,7 +50,11 @@ export const getAllProducts = asynHandler(async (req, res) => {
               lte: 10,
             },
           }
-        : {}),
+        : outOfStock
+          ? {
+              stock: 0,
+            }
+          : {}),
     ...(status
       ? {
           status: String(status).toUpperCase(),
@@ -392,18 +404,35 @@ export const getProduct = asynHandler(async (req, res) => {
       costPrice: true,
       salePrice: true,
       unit: true,
+      weight: true,
+      isActive: true,
+      isFeatured: true,
+      isOrganic: true,
+      avgRating: true,
+      totalReviews: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
       variants: {
         select: {
           id: true,
           name: true,
           price: true,
+          salePrice: true,
           sku: true,
           stock: true,
+          isActive: true,
         },
       },
       images: true,
       status: true,
       adminStatus: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 

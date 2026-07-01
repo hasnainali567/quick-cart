@@ -52,8 +52,8 @@ model user {
   updatedAt      DateTime        @default(now()) @db.Timestamptz(6)
   phone          String?
   role           UserRole        @default(CUSTOMER)
-  isActive       Boolean
-  isSuspended    Boolean
+  isActive       Boolean  @default(false)
+  isSuspended    Boolean  @default(false)
   phoneVerified  Boolean
   fcmToken       String?
   account        account[]

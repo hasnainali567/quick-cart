@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { getAllUser, getUserbyId } from "../../../controllers/adminController/user/admin.user.controller";
+import { getAllUser, getUserbyId, suspendUser, unsuspendUser } from "../../../controllers/adminController/user/admin.user.controller.js";
 
-const adminUserRouter = Router()
+const adminUserRouter = Router();
 
-adminUserRouter.get('/', getAllUser)
-adminUserRouter.get('/:id', getUserbyId)
-
+adminUserRouter.get("/", getAllUser);
+adminUserRouter.get("/:id", getUserbyId);
+adminUserRouter.patch("/:id/suspend", suspendUser);
+adminUserRouter.patch("/:id/unsuspend", unsuspendUser);
 
 export default adminUserRouter;

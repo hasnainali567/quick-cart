@@ -33,7 +33,7 @@ const Table = <T,>({ columns, data }: Props<T>) => {
       </TableHeader>
 
       <TableBody>
-        {data.map((row, i) => (
+        {data?.map((row, i) => (
           <TableRow key={i}>
             {columns.map((col) => (
               <TableCell key={col.key}>{col.render(row)}</TableCell>
